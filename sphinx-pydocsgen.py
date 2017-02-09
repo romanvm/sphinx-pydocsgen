@@ -50,7 +50,6 @@ def parse_args():
 
 
 def main(args):
-    print(args)
     if args.source_dir:
         sys.path.insert(0, cwd)
         try:
