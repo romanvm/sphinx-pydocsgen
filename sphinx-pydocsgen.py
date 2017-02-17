@@ -34,8 +34,7 @@ def parse_args():
                              '(default: False)',
                         action='store_true')
     parser.add_argument('-m', '--make',
-                        help='Run make <output> to generate output documentation '
-                             '(default: "make html")',
+                        help='Run make <output> to generate output documentation',
                         action='store')
     parser.add_argument('-r', '--readme',
                         help='Add Readme file contents to the index page',
