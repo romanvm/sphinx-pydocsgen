@@ -66,7 +66,7 @@ def main():
             call(['make', args.make])
             os.chdir(cwd)
     else:
-        raise pydocsgen.PydocsgenError('You must provide a source directory!')
+        raise RuntimeError('You must provide a source directory!')
 
 
 if __name__ == '__main__':

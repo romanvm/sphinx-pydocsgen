@@ -19,10 +19,6 @@ ModuleData = namedtuple('ModuleData', ['name', 'docstring', 'contents'])
 LITERALS = (int, float, str, tuple, list, dict, set)
 
 
-class PydocsgenError(Exception):
-    pass
-
-
 def not_empty(mod_data):
     """
     Check if a module or a package contains a module-level docstring
