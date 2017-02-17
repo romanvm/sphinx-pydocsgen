@@ -13,7 +13,7 @@ templates = os.path.join(current_dir, 'templates')
 
 ModuleContents = namedtuple('ModuleContents',
                             ['variables', 'functions', 'classes'])
-ModuleInfo = namedtuple('ModuleInfo', ['name', 'docstring', 'contents'])
+ModuleData = namedtuple('ModuleData', ['name', 'docstring', 'contents'])
 
 
 LITERALS = (int, float, str, tuple, list, dict, set)
@@ -85,12 +85,12 @@ def analyze_module(module):
     return contents
 
 
-def parse_modules(modules, package_obj=None):
+def parse_modules(module_infos, package_obj=None):
     """
     Extract info from :class:`pkgutil.ModuleInfo` objects
 
-    :param modules: generator of :class:`pkgutil.ModuleInfo` objects
-    :type modules: types.GeneratorType
+    :param module_infos: generator of :class:`pkgutil.ModuleInfo` objects
+    :type module_infos: types.GeneratorType
     :param package_obj: root package object
     :type package_obj: types.ModuleObject
     :return: generator of :class:`ModuleInfo` objects
@@ -98,10 +98,10 @@ def parse_modules(modules, package_obj=None):
     """
     if package_obj is not None:
         mod_contents = analyze_module(package_obj)
-        yield ModuleInfo(package_obj.__name__,
+        yield ModuleData(package_obj.__name__,
                          inspect.getdoc(package_obj),
                          mod_contents)
-    for mod in modules:
+    for mod in module_infos:
         if mod.ispkg:
             sys.path.append(mod.module_finder.path)
         try:
@@ -109,15 +109,15 @@ def parse_modules(modules, package_obj=None):
         except ModuleNotFoundError:
             pass
         mod_contents = analyze_module(mod_obj)
-        yield ModuleInfo(mod.name, inspect.getdoc(mod_obj), mod_contents)
+        yield ModuleData(mod.name, inspect.getdoc(mod_obj), mod_contents)
 
 
-def render_module(mod_info):
+def render_module(mod_data):
     """
     Render a ``.rst`` file with Sphinx autodoc directives for a module
 
-    :param mod_info: module info object
-    :type mod_info: ModuleInfo
+    :param mod_data: module data object
+    :type mod_data: ModuleData
     :return: rendered ``.rst`` for a module.
     :rtype: str
     """
@@ -125,7 +125,7 @@ def render_module(mod_info):
               'r', encoding='utf-8') as fo:
         raw_template = fo.read()
     template = Template(raw_template)
-    return template.render(module=mod_info, underline='=' * len(mod_info.name))
+    return template.render(module=mod_data, underline='=' * len(mod_data.name))
 
 
 def render_index(non_empty_modules, project_name=None, readme=None):
@@ -160,7 +160,7 @@ def write_docs(project_name, modules, docs_dir, readme_file=None):
 
     :param project_name: project name
     :type project_name: str
-    :param modules: generator of :class:`ModuleInfo` objects
+    :param modules: generator of :class:`ModuleData` objects
     :type modules: types.GeneratorType
     :param docs_dir: output directory for the docs
     :type docs_dir: str
