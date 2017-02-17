@@ -23,20 +23,20 @@ class PydocsgenError(Exception):
     pass
 
 
-def is_empty(mod):
+def not_empty(mod_data):
     """
     Check if a module or a package contains a module-level docstring
     or vairables/functions/classes
 
-    :param mod: :class:`ModuleInfo` object
-    :type mod: ModuleInfo
-    :return: ``True`` if a module/package is "empty"
+    :param mod_data: :class:`ModuleData` object
+    :type mod_data: ModuleInfo
+    :return: ``True`` if a module/package contains some data
     :rtype: bool
     """
-    return not (mod.docstring or
-                mod.contents.variables or
-                mod.contents.functions or
-                mod.contents.classes)
+    return (mod_data.docstring or
+            mod_data.contents.variables or
+            mod_data.contents.functions or
+            mod_data.contents.classes)
 
 
 def get_modules(cwd, src_dir, is_package):
@@ -167,7 +167,7 @@ def write_docs(project_name, modules, docs_dir, readme_file=None):
     :param readme_file: path to the project's readme file
     :type readme_file: str
     """
-    non_empty_modules = [mod for mod in modules if not is_empty(mod)]
+    non_empty_modules = [mod for mod in modules if not_empty(mod)]
     if not os.path.exists(docs_dir):
         os.mkdir(docs_dir)
     for mod in non_empty_modules:
