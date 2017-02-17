@@ -48,7 +48,8 @@ def parse_args():
     return parser.parse_args()
 
 
-def main(args):
+def main():
+    args = parse_args()
     if args.source_dir:
         sys.path.insert(0, cwd)
         try:
@@ -69,4 +70,4 @@ def main(args):
 
 
 if __name__ == '__main__':
-    main(parse_args())
+    main()
