@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# Created on: 10.01.2017
+# coding: utf-8
+# Created on: 01.03.2017
 # Author: Roman Miroshnychenko aka Roman V.M. (romanvm@yandex.ua)
 
 import argparse
@@ -71,3 +71,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
