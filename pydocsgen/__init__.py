@@ -8,8 +8,8 @@ import sys
 from collections import namedtuple
 from jinja2 import Template
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-templates = os.path.join(current_dir, 'templates')
+this_dir = os.path.dirname(os.path.abspath(__file__))
+templates = os.path.join(this_dir, 'templates')
 
 ModuleContents = namedtuple('ModuleContents',
                             ['variables', 'functions', 'classes'])
