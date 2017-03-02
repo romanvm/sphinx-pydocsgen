@@ -25,7 +25,7 @@ def not_empty(mod_data):
     or vairables/functions/classes
 
     :param mod_data: :class:`ModuleData` object
-    :type mod_data: ModuleInfo
+    :type mod_data: ModuleData
     :return: ``True`` if a module/package contains some data
     :rtype: bool
     """
@@ -83,7 +83,8 @@ def analyze_module(module):
 
 def parse_modules(module_infos, package_obj=None):
     """
-    Extract info from :class:`pkgutil.ModuleInfo` objects
+    Extract info from :class:`pkgutil.ModuleInfo` objects and yield info
+    for non-empty modules
 
     :param module_infos: generator of :class:`pkgutil.ModuleInfo` objects
     :type module_infos: types.GeneratorType
@@ -105,7 +106,9 @@ def parse_modules(module_infos, package_obj=None):
         except ModuleNotFoundError:
             pass
         mod_contents = analyze_module(mod_obj)
-        yield ModuleData(mod.name, inspect.getdoc(mod_obj), mod_contents)
+        data = ModuleData(mod.name, inspect.getdoc(mod_obj), mod_contents)
+        if not_empty(data):
+            yield data
 
 
 def render_module(mod_data):
@@ -124,12 +127,12 @@ def render_module(mod_data):
     return template.render(module=mod_data, underline='=' * len(mod_data.name))
 
 
-def render_index(non_empty_modules, project_name=None, readme=None):
+def render_index(modules, project_name=None, readme=None):
     """
     Render the index page
 
-    :param non_empty_modules: the list of non-empty packages/modules
-    :type non_empty_modules: list
+    :param modules: the list of packages/modules
+    :type modules: list
     :param project_name: the name of the project
     :type project_name: str
     :param readme: project's Readme contents
@@ -146,7 +149,7 @@ def render_index(non_empty_modules, project_name=None, readme=None):
         header = ''
     return template.render(header=header,
                            underline='=' * len(header),
-                           modules=non_empty_modules,
+                           modules=modules,
                            readme=readme)
 
 
@@ -163,10 +166,9 @@ def write_docs(project_name, modules, docs_dir, readme_file=None):
     :param readme_file: path to the project's readme file
     :type readme_file: str
     """
-    non_empty_modules = [mod for mod in modules if not_empty(mod)]
     if not os.path.exists(docs_dir):
         os.mkdir(docs_dir)
-    for mod in non_empty_modules:
+    for mod in modules:
         mod_rst = render_module(mod)
         with open(os.path.join(docs_dir, mod.name + '.rst'),
                   'w', encoding='utf-8') as fo:
@@ -176,10 +178,10 @@ def write_docs(project_name, modules, docs_dir, readme_file=None):
             readme = fo.read()
     else:
         readme = None
-    modules_rst = render_index(non_empty_modules)
+    modules_rst = render_index(modules)
     with open(os.path.join(docs_dir, 'modules.rst'),
               'w', encoding='utf-8') as fo:
         fo.write(modules_rst)
-    index_rst = render_index(non_empty_modules, project_name, readme)
+    index_rst = render_index(modules, project_name, readme)
     with open(os.path.join(docs_dir, 'index.rst'), 'w', encoding='utf-8') as fo:
         fo.write(index_rst)

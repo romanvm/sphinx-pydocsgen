@@ -10,7 +10,7 @@ basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(basedir, '{{ dirname }}'))
 
 {% for module in modules %}
-import {{ module }}
+import {{ module.name }}
 {% endfor %}
 
 extensions = [
