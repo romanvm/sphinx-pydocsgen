@@ -127,7 +127,7 @@ def render_module(mod_data):
     return template.render(module=mod_data, underline='=' * len(mod_data.name))
 
 
-def render_index(modules, project_name=None, readme=None):
+def render_index(modules, project_name=None, readme=None, filename='index.rst'):
     """
     Render the index page
 
@@ -137,10 +137,12 @@ def render_index(modules, project_name=None, readme=None):
     :type project_name: str
     :param readme: project's Readme contents
     :type readme: str
+    :param filename: template file name
+    :type filename: str
     :return: rendered ``.rst`` for the index page
     :rtype: str
     """
-    with open(os.path.join(templates, 'index.rst'), 'r', encoding='utf-8') as fo:
+    with open(os.path.join(templates, filename), 'r', encoding='utf-8') as fo:
         raw_index = fo.read()
     template = Template(raw_index)
     if project_name is not None:
