@@ -44,6 +44,10 @@ todo_include_todos = False
 
 html_theme = 'alabaster'
 
+html_theme_options = {
+    'font_family': 'Georgia',
+}
+
 html_sidebars = {
     '**': [
         'about.html',
