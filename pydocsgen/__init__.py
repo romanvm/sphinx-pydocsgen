@@ -14,6 +14,7 @@ templates = os.path.join(this_dir, 'templates')
 ModuleContents = namedtuple('ModuleContents',
                             ['variables', 'functions', 'classes'])
 ModuleData = namedtuple('ModuleData', ['name', 'docstring', 'contents'])
+ModuleInfo = namedtuple('ModuleInfo', ['module_finder', 'name', 'ispkg'])
 
 
 LITERALS = (int, float, str, tuple, list, dict, set)
@@ -52,7 +53,11 @@ def get_modules(cwd, src_dir, is_package):
         prefix = src_dir + '.'
     else:
         prefix = ''
-    return pkgutil.walk_packages([os.path.join(cwd, src_dir)], prefix=prefix)
+    pkg_gen = pkgutil.walk_packages([os.path.join(cwd, src_dir)], prefix=prefix)
+    if hasattr(pkgutil, 'ModuleInfo'):  # Python 3.6+
+        return pkg_gen
+    else:
+        return (ModuleInfo(*item) for item in pkg_gen)
 
 
 def analyze_module(module):
