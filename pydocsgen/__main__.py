@@ -61,6 +61,14 @@ def main():
         project_name = args.name or os.path.basename(args.source_dir).capitalize()
         full_docs_dir = os.path.join(cwd, args.output)
         pydocsgen.write_docs(project_name, parsed_modules, full_docs_dir)
+        if args.conf:
+            pydocsgen.write_sphinx_config(full_docs_dir,
+                                          args.source_dir,
+                                          parsed_modules,
+                                          args.name,
+                                          args.author,
+                                          args.version
+                                          )
         if args.make:
             os.chdir(full_docs_dir)
             call(['make', args.make])

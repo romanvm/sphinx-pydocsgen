@@ -160,6 +160,60 @@ def render_index(modules, project_name=None, readme=None, filename='index.rst'):
                            readme=readme)
 
 
+def render_makefile(filename, project_name):
+    """
+    Render a makefile for generating Sphinx output from a template
+
+    :param filename: the name of makefile
+    :type filename: str
+    :return: rendered makefile
+    :rtype: str
+    """
+    with open(os.path.join(templates, filename), 'r', encoding='utf-8') as fo:
+        raw_makefile = fo.read()
+    template = Template(raw_makefile)
+    return template.render(project_name=project_name)
+
+
+def render_conf_py(dirname, modules, project_name, author, version):
+    """
+    Render conf.py file fir Sphinx project
+    
+    :param dirname: 
+    :param modules: 
+    :param project_name: 
+    :param author: 
+    :param version: 
+    :return: 
+    """
+    with open(os.path.join(templates, 'conf.py.tpl'), 'r', encoding='utf-8') as fo:
+        raw_conf = fo.read()
+    template = Template(raw_conf)
+    return template.render(dirname=dirname, modules=modules,
+                           project_name=project_name,
+                           author=author, version=version)
+
+
+def write_sphinx_config(docs_dir, dirname, modules, project_name, author, version):
+    """
+    Write conf.py and makefiles for a Sphinx project
+    
+    :param docs_dir:
+    :param dirname: 
+    :param modules: 
+    :param project_name: 
+    :param author: 
+    :param version:
+    """
+    for filename in ('Makefile', 'make.bat'):
+        makefile = render_makefile(filename, project_name)
+        with open(os.path.join(docs_dir, filename), 'w', encoding='utf-8') as fo:
+            fo.write(makefile)
+    conf_py = render_conf_py(dirname, modules, project_name, author, version)
+    with open(os.path.join(docs_dir, 'conf.py'), 'w', encoding='utf-8') as fo:
+        fo.write(conf_py)
+
+
 def write_docs(project_name, modules, docs_dir, readme_file=None):
     """
     Write ``.rst`` files for the docs

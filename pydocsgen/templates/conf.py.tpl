@@ -8,6 +8,7 @@ import datetime
 basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, os.path.join(basedir, '{{ dirname }}'))
+sys.path.insert(0, basedir)
 
 {% for module in modules %}
 import {{ module.name }}
