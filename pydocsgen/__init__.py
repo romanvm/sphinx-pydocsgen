@@ -137,7 +137,7 @@ def render_index(modules, project_name=None, readme=None, filename='index.rst'):
     Render the index page
 
     :param modules: the list of packages/modules
-    :type modules: list
+    :type modules: list or types.GeneratorType
     :param project_name: the name of the project
     :type project_name: str
     :param readme: project's Readme contents
