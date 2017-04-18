@@ -2,8 +2,8 @@
 {{ header }}
 {{ underline }}
 {% endif %}
-{%- if readme %}
-.. include:: {{ readme }}
+{% if readme %}
+{{ readme }}
 {% endif %}
 
 API Reference
