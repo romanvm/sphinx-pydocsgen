@@ -60,20 +60,20 @@ def get_modules(cwd, src_dir, is_package):
         return (ModuleInfo(*item) for item in pkg_gen)
 
 
-def analyze_module(module):
+def analyze_module(mod):
     """
     Extract lists of variables/functions/classes
     from a module object
 
-    :param module: module object
-    :type module: types.ModuleType
+    :param mod: module object
+    :type mod: types.ModuleType
     :return: contents of a module object
     :rtype: ModuleContents
     """
     contents = ModuleContents([], [], [])
-    for name, obj in inspect.getmembers(module):
+    for name, obj in inspect.getmembers(mod):
         try:
-            imported = obj.__module__ != module.__name__
+            imported = obj.__module__ != mod.__name__
         except AttributeError:
             imported = False
         if not (name.startswith('_') or imported):
