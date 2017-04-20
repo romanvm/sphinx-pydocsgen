@@ -38,7 +38,7 @@ def parse_args():
                         action='store')
     parser.add_argument('-r', '--readme',
                         help='Add Readme file contents to the index page',
-                        action='store')
+                        action='store', default=None)
     parser.add_argument('--no-header',
                         help='Do not add a header to the index.rst page',
                         action='store_true')
@@ -60,7 +60,6 @@ def main():
         parsed_modules = pydocsgen.parse_modules(modules, package)
         project_name = args.name or os.path.basename(args.source_dir).capitalize()
         full_docs_dir = os.path.join(cwd, args.output)
-        pydocsgen.write_docs(project_name, parsed_modules, full_docs_dir)
         if args.conf:
             pydocsgen.write_sphinx_config(full_docs_dir,
                                           args.source_dir,
@@ -69,6 +68,10 @@ def main():
                                           args.author,
                                           args.version
                                           )
+        if args.no_header:
+            project_name = None
+        pydocsgen.write_docs(project_name, parsed_modules, full_docs_dir,
+                             args.readme, args.no_index)
         if args.make:
             os.chdir(full_docs_dir)
             call(['make', args.make])
@@ -79,4 +82,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

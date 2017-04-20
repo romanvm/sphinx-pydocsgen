@@ -214,7 +214,7 @@ def write_sphinx_config(docs_dir, dirname, modules, project_name, author, versio
         fo.write(conf_py)
 
 
-def write_docs(project_name, modules, docs_dir, readme_file=None):
+def write_docs(project_name, modules, docs_dir, readme_file=None, no_index=False):
     """
     Write ``.rst`` files for the docs
 
@@ -243,6 +243,7 @@ def write_docs(project_name, modules, docs_dir, readme_file=None):
     with open(os.path.join(docs_dir, 'modules.rst'),
               'w', encoding='utf-8') as fo:
         fo.write(modules_rst)
-    index_rst = render_index(modules, project_name, readme)
-    with open(os.path.join(docs_dir, 'index.rst'), 'w', encoding='utf-8') as fo:
-        fo.write(index_rst)
+    if not no_index:
+        index_rst = render_index(modules, project_name, readme)
+        with open(os.path.join(docs_dir, 'index.rst'), 'w', encoding='utf-8') as fo:
+            fo.write(index_rst)
