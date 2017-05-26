@@ -1,5 +1,5 @@
 # Created on: 23.01.2017
-# Author: Roman Miroshnychenko aka Roman V.M. (romanvm@yandex.ua)
+# Author: Roman Miroshnychenko aka Roman V.M. (roman1972@gmail.com)
 
 import inspect
 import os
