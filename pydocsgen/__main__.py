@@ -5,6 +5,7 @@
 import argparse
 import os
 import sys
+from importlib import import_module
 from subprocess import call
 import pydocsgen
 
@@ -53,7 +54,7 @@ def main():
     if args.source_dir:
         sys.path.insert(0, cwd)
         try:
-            package = __import__(args.source_dir)
+            package = import_module(args.source_dir)
         except ImportError:
             package = None
         modules = pydocsgen.get_modules(cwd, args.source_dir, package)
